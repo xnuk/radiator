@@ -1,0 +1,18 @@
+cabal-version: 1.12
+name:           rsa2048
+version:        0.1.0.0
+author:         Xnuk Shuman
+copyright:      2019 Xnuk Shuman
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+
+executable rsa2048
+  main-is: Main.hs
+  other-modules:
+      Paths_rsa2048
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , parallel
+  default-language: Haskell2010
