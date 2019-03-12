@@ -2,6 +2,7 @@
 module Main (main) where
 
 import "base" Data.Maybe (isJust)
+import "base" System.Environment (getArgs)
 import "parallel" Control.Parallel.Strategies (using, parBuffer, rdeepseq, Strategy)
 
 rsa2048 = read "\
@@ -27,10 +28,16 @@ getFactorFrom from largeNumber
     | largeNumber < 2 = []
     | otherwise = nextFrom : getFactorFrom nextFrom nextLarge
     where
-        strat = parBuffer 2048 rdeepseq
+        strat = parBuffer 500 rdeepseq
         worker = map (divable largeNumber) [from..] `using` strat
         Just (nextFrom, nextLarge) = head . filter isJust $ worker
 
 getFactors = getFactorFrom 2
 
-main = print $ getFactors rsa2048
+main = do
+    args <- getArgs
+    let bigNumber = case args of
+            [] -> rsa2048
+            (x:_) -> read $ filter (\c -> c >= '0' && c <= '9') x
+
+    mapM_ print $ getFactors bigNumber
